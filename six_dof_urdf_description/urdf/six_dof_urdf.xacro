@@ -4,6 +4,48 @@
 <xacro:include filename="$(find six_dof_urdf_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find six_dof_urdf_description)/urdf/six_dof_urdf.ros2control" />
 <xacro:include filename="$(find six_dof_urdf_description)/urdf/six_dof_urdf.gazebo" />
+
+<!-- Ground-fixed world link -->
+<link name="world"/>
+
+<!-- Large base platform for stability (200mm diameter, 20mm thick cylinder) -->
+<link name="base_platform">
+  <inertial>
+    <origin xyz="0 0 -0.01" rpy="0 0 0"/>
+    <mass value="5.0"/>
+    <inertia ixx="0.0127" iyy="0.0127" izz="0.025" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="0 0 -0.01" rpy="0 0 0"/>
+    <geometry>
+      <cylinder radius="0.1" length="0.02"/>
+    </geometry>
+    <material name="dark_grey">
+      <color rgba="0.3 0.3 0.3 1.0"/>
+    </material>
+  </visual>
+  <collision>
+    <origin xyz="0 0 -0.01" rpy="0 0 0"/>
+    <geometry>
+      <cylinder radius="0.1" length="0.02"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- Fix platform to the world (ground) -->
+<joint name="world_to_platform" type="fixed">
+  <origin xyz="0.0 0.0 0.33" rpy="0 0 0"/>
+  <parent link="world"/>
+  <child link="base_platform"/>
+</joint>
+
+<!-- Fix arm base on top of the platform -->
+<joint name="platform_to_base" type="fixed">
+  <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+  <parent link="base_platform"/>
+  <child link="base_link"/>
+</joint>
+
 <link name="base_link">
   <inertial>
     <origin xyz="-0.005846550166018204 -2.0745025295335243e-07 -0.006510816823759035" rpy="0 0 0"/>

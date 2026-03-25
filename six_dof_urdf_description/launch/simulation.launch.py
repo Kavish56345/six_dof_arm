@@ -44,7 +44,10 @@ def generate_launch_description():
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
-        parameters=[{'robot_description': robot_urdf}],
+        parameters=[{
+            'robot_description': robot_urdf,
+            'use_sim_time': True,
+        }],
     )
 
     # 2. Ignition Gazebo
@@ -67,7 +70,7 @@ def generate_launch_description():
                 '-allow_renaming', 'false',
                 '-x', '0.0',
                 '-y', '0.0',
-                '-z', '0.32',
+                '-z', '0.0',
                 '-Y', '0.0',
             ],
             output='screen',
@@ -125,6 +128,7 @@ def generate_launch_description():
             executable='gui_to_controller',
             name='gui_to_controller',
             output='screen',
+            parameters=[{'use_sim_time': True}],
         )],
     )
 
@@ -137,6 +141,7 @@ def generate_launch_description():
             name='rviz2',
             arguments=['-d', rviz_config],
             output='screen',
+            parameters=[{'use_sim_time': True}],
         )],
     )
 
